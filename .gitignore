@@ -1,16 +1,8 @@
 
 **/settings/Mainnet.toml
 **/settings/Testnet.toml
-.cache/**
+**/.cache/**
 history.txt
-
-logs
-*.log
-npm-debug.log*
-coverage
-*.info
-costs-reports.json
-node_modules
 
 # Logs
 logs
@@ -20,6 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+coverage
+*.info
+costs-reports.json
 
 node_modules
 dist
@@ -27,7 +22,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
+**/.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
