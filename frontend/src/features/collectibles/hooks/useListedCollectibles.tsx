@@ -4,12 +4,14 @@ import {
   AnchorMode,
   FungibleConditionCode,
   NonFungibleConditionCode,
+  addressToString,
   callReadOnlyFunction,
   contractPrincipalCV,
   createAssetInfo,
   cvToValue,
   makeContractNonFungiblePostCondition,
   makeStandardSTXPostCondition,
+  parseAssetInfoString,
   uintCV,
 } from "@stacks/transactions";
 import { StacksMocknet } from "@stacks/network";
@@ -47,8 +49,11 @@ export const useListedCollectibles = () => {
   }, []);
 
   const buyAsset = async (collectible: ListedCollectible) => {
-    const collectibleAddress = collectible.nftAssetContract.split(".")[0];
-    const collectibleContractName = collectible.nftAssetContract.split(".")[1];
+    const assetInfo = parseAssetInfoString(collectible.nftAssetContract);
+    const assetName = await getAssetName(
+      addressToString(assetInfo.address),
+      assetInfo.contractName.content
+    );
 
     await openContractCall({
       contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
@@ -56,7 +61,10 @@ export const useListedCollectibles = () => {
       functionName: "fulfil-listing-stx",
       functionArgs: [
         uintCV(collectible.listingId),
-        contractPrincipalCV(collectibleAddress, collectibleContractName),
+        contractPrincipalCV(
+          addressToString(assetInfo.address),
+          assetInfo.contractName.content
+        ),
       ],
 
       anchorMode: AnchorMode.OnChainOnly,
@@ -68,9 +76,9 @@ export const useListedCollectibles = () => {
           "marxet",
           NonFungibleConditionCode.Sends,
           createAssetInfo(
-            collectibleAddress,
-            collectibleContractName,
-            await getAssetName(collectibleAddress, collectibleContractName)
+            addressToString(assetInfo.address),
+            assetInfo.contractName.content,
+            assetName
           ),
           uintCV(collectible.tokenId)
         ),

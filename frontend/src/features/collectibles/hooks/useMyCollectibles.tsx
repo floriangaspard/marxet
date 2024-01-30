@@ -4,12 +4,13 @@ import { StacksMocknet } from "@stacks/network";
 import {
   AnchorMode,
   NonFungibleConditionCode,
+  addressToString,
   callReadOnlyFunction,
   contractPrincipalCV,
-  createAssetInfo,
   cvToValue,
   makeStandardNonFungiblePostCondition,
   noneCV,
+  parseAssetInfoString,
   tupleCV,
   uintCV,
 } from "@stacks/transactions";
@@ -69,15 +70,8 @@ export const useMyCollectibles = () => {
   }, [getWhitelistedStatus]);
 
   const listAsset = async (collectible: Collectible, price: number) => {
-    const collectibleAddress = collectible.asset_identifier.split(".")[0];
-    const collectibleContractName = collectible.asset_identifier
-      .split(".")[1]
-      .split("::")[0];
-    const collectibleAssetName = collectible.asset_identifier
-      .split(".")[1]
-      .split("::")[1];
-
     const tokenId = parseInt(collectible.value.repr.substring(1));
+    const assetInfo = parseAssetInfoString(collectible.asset_identifier);
 
     await openContractCall({
       network: new StacksMocknet(),
@@ -87,11 +81,7 @@ export const useMyCollectibles = () => {
         makeStandardNonFungiblePostCondition(
           userSession.loadUserData().profile.stxAddress.testnet,
           NonFungibleConditionCode.Sends,
-          createAssetInfo(
-            collectibleAddress,
-            collectibleContractName,
-            collectibleAssetName
-          ),
+          assetInfo,
           uintCV(tokenId)
         ),
       ],
@@ -100,7 +90,10 @@ export const useMyCollectibles = () => {
       contractName: "marxet",
       functionName: "list-asset",
       functionArgs: [
-        contractPrincipalCV(collectibleAddress, collectibleContractName),
+        contractPrincipalCV(
+          addressToString(assetInfo.address),
+          assetInfo.contractName.content
+        ),
         tupleCV({
           taker: noneCV(),
           "token-id": uintCV(tokenId),
