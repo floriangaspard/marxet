@@ -1,0 +1,1 @@
+export type TRANSACTION_STATUS = "SIGN" | "SIGNED" | "CANCELLED";

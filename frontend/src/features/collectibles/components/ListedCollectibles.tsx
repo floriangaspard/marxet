@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/Button";
 import {
   Card,
   CardContent,
@@ -7,9 +6,11 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 import { useListedCollectibles } from "../hooks/useListedCollectibles";
+import { TransactionDialog } from "./TransactionDialog";
 
 export const ListedCollectibles = () => {
-  const { collectibles, buyAsset } = useListedCollectibles();
+  const { collectibles, buyAsset, transactionStatus, setTransactionStatus } =
+    useListedCollectibles();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -23,13 +24,15 @@ export const ListedCollectibles = () => {
             <CardFooter>
               <div className="flex justify-between w-full items-center">
                 <span>STX: {collectible.price}</span>
-                <Button
+                <TransactionDialog
+                  buttonText="Buy"
+                  status={transactionStatus}
+                  title="Buy asset"
                   onClick={() => {
+                    setTransactionStatus("SIGN");
                     buyAsset(collectible);
                   }}
-                >
-                  Buy
-                </Button>
+                />
               </div>
             </CardFooter>
           </Card>

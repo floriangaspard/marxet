@@ -5,9 +5,7 @@ import {
   AnchorMode,
   NonFungibleConditionCode,
   addressToString,
-  callReadOnlyFunction,
   contractPrincipalCV,
-  cvToValue,
   makeStandardNonFungiblePostCondition,
   noneCV,
   parseAssetInfoString,
@@ -16,27 +14,23 @@ import {
 } from "@stacks/transactions";
 import { useCallback, useEffect, useState } from "react";
 import { Collectible } from "../types/Collectible";
+import { isWhitelisted } from "../utils/helper";
+import { TRANSACTION_STATUS } from "@/features/collectibles/types/TransactionStatus";
 
 export const useMyCollectibles = () => {
-  const [collectibles, setCollectibles] = useState<Collectible[]>([]);
+  const [collectibles, setCollectibles] = useState<Collectible[]>([
+    {
+      asset_identifier: "ST123.asd::aa",
+      block_height: 0,
+      tx_id: "1",
+      value: { hex: "11", repr: "2" },
+    },
+  ]);
   const [isAssetWhitelisted, setIsAssetWhiteListed] = useState<{
     [fieldName: string]: boolean;
   }>({});
-
-  const isWhitelisted = async (contract: string) => {
-    return cvToValue(
-      await callReadOnlyFunction({
-        network: new StacksMocknet(),
-        contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
-        contractName: "marxet",
-        functionName: "is-whitelisted",
-        functionArgs: [
-          contractPrincipalCV(contract.split(".")[0], contract.split(".")[1]),
-        ],
-        senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
-      })
-    );
-  };
+  const [transactionStatus, setTransactionStatus] =
+    useState<TRANSACTION_STATUS>("SIGN");
 
   const getWhitelistedStatus = useCallback(
     async (collectibles: Collectible[]) => {
@@ -103,12 +97,11 @@ export const useMyCollectibles = () => {
         }),
       ],
 
-      onFinish: (response) => {
-        console.log(response);
-        // WHEN user confirms pop-up
+      onFinish: () => {
+        setTransactionStatus("SIGNED");
       },
       onCancel: () => {
-        // WHEN user cancels/closes pop-up
+        setTransactionStatus("CANCELLED");
       },
     });
   };
@@ -117,5 +110,11 @@ export const useMyCollectibles = () => {
     retrieveCollectibles();
   }, [retrieveCollectibles]);
 
-  return { collectibles, isAssetWhitelisted, listAsset };
+  return {
+    collectibles,
+    isAssetWhitelisted,
+    listAsset,
+    transactionStatus,
+    setTransactionStatus,
+  };
 };

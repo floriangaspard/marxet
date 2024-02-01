@@ -1,6 +1,10 @@
 import { userSession } from "@/user-session";
 import { StacksMocknet } from "@stacks/network";
-import { callReadOnlyFunction, cvToValue } from "@stacks/transactions";
+import {
+  callReadOnlyFunction,
+  contractPrincipalCV,
+  cvToValue,
+} from "@stacks/transactions";
 
 export const retrieveListingNonce = async () => {
   return parseInt(
@@ -25,4 +29,19 @@ export const getAssetName = async (address: string, contractName: string) => {
       contractName
   );
   return (await response.json())["non_fungible_tokens"][0]["name"];
+};
+
+export const isWhitelisted = async (contract: string) => {
+  return cvToValue(
+    await callReadOnlyFunction({
+      network: new StacksMocknet(),
+      contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+      contractName: "marxet",
+      functionName: "is-whitelisted",
+      functionArgs: [
+        contractPrincipalCV(contract.split(".")[0], contract.split(".")[1]),
+      ],
+      senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+    })
+  );
 };

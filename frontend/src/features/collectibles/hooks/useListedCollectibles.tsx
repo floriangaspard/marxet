@@ -19,9 +19,12 @@ import { userSession } from "@/user-session";
 import { jsonParseCollectible } from "../utils/parsing";
 import { openContractCall } from "@stacks/connect";
 import { getAssetName, retrieveListingNonce } from "../utils/helper";
+import { TRANSACTION_STATUS } from "../types/TransactionStatus";
 
 export const useListedCollectibles = () => {
   const [collectibles, setCollectibles] = useState<ListedCollectible[]>([]);
+  const [transactionStatus, setTransactionStatus] =
+    useState<TRANSACTION_STATUS>("SIGN");
 
   const retrieveCollectibles = useCallback(async () => {
     let response = { value: {} };
@@ -35,13 +38,13 @@ export const useListedCollectibles = () => {
           contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
           contractName: "marxet",
           functionName: "get-listing",
-          functionArgs: [uintCV(i)],
+          functionArgs: [uintCV(i - 1)],
           senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
         })
       );
 
       if (response !== null) {
-        retrieved.push(jsonParseCollectible(response, i));
+        retrieved.push(jsonParseCollectible(response, i - 1));
       }
     }
 
@@ -88,6 +91,13 @@ export const useListedCollectibles = () => {
           collectible.price
         ),
       ],
+
+      onFinish: () => {
+        setTransactionStatus("SIGNED");
+      },
+      onCancel: () => {
+        setTransactionStatus("CANCELLED");
+      },
     });
   };
 
@@ -95,5 +105,5 @@ export const useListedCollectibles = () => {
     retrieveCollectibles();
   }, [retrieveCollectibles]);
 
-  return { collectibles, buyAsset };
+  return { collectibles, buyAsset, transactionStatus, setTransactionStatus };
 };

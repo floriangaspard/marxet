@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/Input";
-import { Button } from "../../../components/ui/Button";
 import {
   Card,
   CardContent,
@@ -9,9 +8,16 @@ import {
 } from "../../../components/ui/Card";
 import { useMyCollectibles } from "../hooks/useMyCollectibles";
 import { useRef } from "react";
+import { TransactionDialog } from "./TransactionDialog";
 
 export const MyCollectibles = () => {
-  const { collectibles, isAssetWhitelisted, listAsset } = useMyCollectibles();
+  const {
+    collectibles,
+    isAssetWhitelisted,
+    listAsset,
+    transactionStatus,
+    setTransactionStatus,
+  } = useMyCollectibles();
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
   return (
@@ -32,16 +38,18 @@ export const MyCollectibles = () => {
                       (inputRefs.current[idx] = el as HTMLInputElement)
                     }
                   ></Input>
-                  <Button
+                  <TransactionDialog
+                    buttonText="List"
+                    title="Listing asset"
+                    status={transactionStatus}
                     onClick={async () => {
+                      setTransactionStatus("SIGN");
                       await listAsset(
                         collectible,
                         parseInt(inputRefs.current[idx].value)
                       );
                     }}
-                  >
-                    List
-                  </Button>
+                  />
                 </>
               )}
             </CardFooter>
