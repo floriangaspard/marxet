@@ -14,18 +14,11 @@ import {
 } from "@stacks/transactions";
 import { useCallback, useEffect, useState } from "react";
 import { Collectible } from "../types/Collectible";
-import { isWhitelisted } from "../utils/helper";
+import { fetchHoldings, isWhitelisted } from "../utils/helper";
 import { TRANSACTION_STATUS } from "@/features/collectibles/types/TransactionStatus";
 
 export const useMyCollectibles = () => {
-  const [collectibles, setCollectibles] = useState<Collectible[]>([
-    {
-      asset_identifier: "ST123.asd::aa",
-      block_height: 0,
-      tx_id: "1",
-      value: { hex: "11", repr: "2" },
-    },
-  ]);
+  const [collectibles, setCollectibles] = useState<Collectible[]>([]);
   const [isAssetWhitelisted, setIsAssetWhiteListed] = useState<{
     [fieldName: string]: boolean;
   }>({});
@@ -51,16 +44,10 @@ export const useMyCollectibles = () => {
   );
 
   const retrieveCollectibles = useCallback(async () => {
-    const retrievedMessage = await fetch(
-      "http://localhost:3999/extended/v1/tokens/nft/holdings?" +
-        new URLSearchParams({
-          principal: userSession.loadUserData().profile.stxAddress.testnet,
-        })
-    );
-    const responseJson = await retrievedMessage.json();
-    const result = responseJson["results"] as Collectible[];
-    setCollectibles(result);
-    getWhitelistedStatus(result);
+    const holdings = (await fetchHoldings())["results"] as Collectible[];
+
+    setCollectibles(holdings);
+    getWhitelistedStatus(holdings);
   }, [getWhitelistedStatus]);
 
   const listAsset = async (collectible: Collectible, price: number) => {

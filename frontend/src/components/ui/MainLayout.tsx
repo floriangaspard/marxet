@@ -6,6 +6,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "./NavigationMenu";
+import { userSession } from "@/user-session";
 
 export const MainLayout = () => {
   return (
@@ -17,11 +18,16 @@ export const MainLayout = () => {
               Market
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link to="mycollectibles" className={navigationMenuTriggerStyle()}>
-              My collectibles
-            </Link>
-          </NavigationMenuItem>
+          {userSession.isUserSignedIn() && (
+            <NavigationMenuItem>
+              <Link
+                to="mycollectibles"
+                className={navigationMenuTriggerStyle()}
+              >
+                My collectibles
+              </Link>
+            </NavigationMenuItem>
+          )}
         </NavigationMenuList>
       </NavigationMenu>
       <Outlet />

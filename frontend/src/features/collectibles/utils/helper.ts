@@ -45,3 +45,14 @@ export const isWhitelisted = async (contract: string) => {
     })
   );
 };
+
+export const fetchHoldings = async () => {
+  const retrievedMessage = await fetch(
+    "http://localhost:3999/extended/v1/tokens/nft/holdings?" +
+      new URLSearchParams({
+        principal: userSession.loadUserData().profile.stxAddress.testnet,
+      })
+  );
+
+  return await retrievedMessage.json();
+};

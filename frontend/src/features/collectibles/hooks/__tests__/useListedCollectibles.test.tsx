@@ -96,7 +96,7 @@ describe("Retrieve listed collectibles", () => {
 
     const { result } = renderHook(() => useListedCollectibles());
     await waitFor(() => {
-      expect(result.current.collectibles.length).toBe(0);
+      expect(result.current.collectibles).toHaveLength(0);
     });
   });
 
@@ -108,7 +108,7 @@ describe("Retrieve listed collectibles", () => {
     const { result } = renderHook(() => useListedCollectibles());
 
     await waitFor(() => {
-      expect(result.current.collectibles.length).toBe(2);
+      expect(result.current.collectibles).toHaveLength(2);
     });
   });
 });
