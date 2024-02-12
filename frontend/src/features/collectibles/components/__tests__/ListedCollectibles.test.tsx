@@ -88,7 +88,9 @@ describe("Display listed collectibles", () => {
 
     expect(screen.getAllByRole("button")).toHaveLength(2);
   });
+});
 
+describe("Try to buy a listed collectible", () => {
   it("should set transaction status and call buy function", () => {
     const mockSetTransactionStatus = vi.fn();
     const mockBuyAsset = vi.fn();
