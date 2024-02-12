@@ -30,7 +30,7 @@ export const MyCollectibles = () => {
             </CardHeader>
             <CardContent>{collectible.value.repr}</CardContent>
             <CardFooter>
-              {isAssetWhitelisted && (
+              {isAssetWhitelisted[collectible.asset_identifier] && (
                 <>
                   <Input
                     type="number"
