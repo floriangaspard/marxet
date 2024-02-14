@@ -14,8 +14,8 @@ import {
 } from "@stacks/transactions";
 import { useCallback, useEffect, useState } from "react";
 import { Collectible } from "../types/Collectible";
-import { fetchHoldings, isWhitelisted } from "../utils/helper";
 import { TRANSACTION_STATUS } from "@/features/collectibles/types/TransactionStatus";
+import { getHoldings, isWhitelisted } from "../api/collectibles";
 
 export const useMyCollectibles = () => {
   const [collectibles, setCollectibles] = useState<Collectible[]>([]);
@@ -44,7 +44,7 @@ export const useMyCollectibles = () => {
   );
 
   const retrieveCollectibles = useCallback(async () => {
-    const holdings = (await fetchHoldings())["results"] as Collectible[];
+    const holdings = (await getHoldings())["results"] as Collectible[];
 
     setCollectibles(holdings);
     getWhitelistedStatus(holdings);

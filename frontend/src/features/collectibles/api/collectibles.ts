@@ -6,19 +6,15 @@ import {
   cvToValue,
 } from "@stacks/transactions";
 
-export const retrieveListingNonce = async () => {
-  return parseInt(
-    cvToValue(
-      await callReadOnlyFunction({
-        network: new StacksMocknet(),
-        contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
-        contractName: "marxet",
-        functionName: "get-listing-nonce",
-        functionArgs: [],
-        senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+export const getHoldings = async () => {
+  const retrievedMessage = await fetch(
+    "http://localhost:3999/extended/v1/tokens/nft/holdings?" +
+      new URLSearchParams({
+        principal: userSession.loadUserData().profile.stxAddress.testnet,
       })
-    )["value"]
   );
+
+  return await retrievedMessage.json();
 };
 
 export const getAssetName = async (address: string, contractName: string) => {
@@ -44,15 +40,4 @@ export const isWhitelisted = async (contract: string) => {
       senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
     })
   );
-};
-
-export const fetchHoldings = async () => {
-  const retrievedMessage = await fetch(
-    "http://localhost:3999/extended/v1/tokens/nft/holdings?" +
-      new URLSearchParams({
-        principal: userSession.loadUserData().profile.stxAddress.testnet,
-      })
-  );
-
-  return await retrievedMessage.json();
 };

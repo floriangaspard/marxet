@@ -1,10 +1,5 @@
 import { Mock, describe, expect, it, vi } from "vitest";
-import {
-  fetchHoldings,
-  getAssetName,
-  isWhitelisted,
-  retrieveListingNonce,
-} from "../helper";
+import { getHoldings, getAssetName, isWhitelisted } from "../collectibles";
 import { callReadOnlyFunction } from "@stacks/transactions";
 
 vi.mock("@/user-session", () => {
@@ -24,18 +19,45 @@ vi.mock("@stacks/transactions", async (importOriginal) => {
   };
 });
 
-describe("retrieveListingNonce", () => {
-  it("should retrieve nonce 3", async () => {
-    const mockValue = {
-      type: 7,
-      value: {
-        type: 1,
-        value: 3n,
-      },
+describe("getHoldings", () => {
+  it("should return nft holdings json", async () => {
+    const mockJson = {
+      limit: 50,
+      offset: 0,
+      total: 2,
+      results: [
+        {
+          asset_identifier:
+            "SPXG42Y7WDTMZF5MPV02C3AWY1VNP9FH9C23PRXH.Marbling::Marbling",
+          value: {
+            hex: "0x01000000000000000000000000000005e7",
+            repr: "u1511",
+          },
+          block_height: 85084,
+          tx_id:
+            "0xa071319bc98c08ce9817cf0f7f2669bbb757be289c532db7374f38ea2ab92804",
+        },
+        {
+          asset_identifier:
+            "SP497E7RX3233ATBS2AB9G4WTHB63X5PBSP5VGAQ.boom-nfts::boom",
+          value: {
+            hex: "0x0100000000000000000000000000001d5d",
+            repr: "u7517",
+          },
+          block_height: 37467,
+          tx_id:
+            "0x173957bb628b0350dbc37a21ffea9165fdc21a8ddab5e1a686c54d18d9644acf",
+        },
+      ],
     };
-    vi.mocked(callReadOnlyFunction).mockResolvedValue(mockValue);
 
-    expect(await retrieveListingNonce()).toBe(3);
+    global.fetch = vi.fn(async () =>
+      Promise.resolve({
+        json: () => Promise.resolve(mockJson),
+      })
+    ) as Mock;
+
+    expect(await getHoldings()).toBe(mockJson);
   });
 });
 
@@ -86,47 +108,5 @@ describe("isWhitelisted", () => {
     expect(
       await isWhitelisted("SPXG42Y7WDTMZF5MPV02C3AWY1VNP9FH9C23PRXH.a")
     ).toBe(false);
-  });
-});
-
-describe("fetchHoldings", () => {
-  it("should return nft holdings json", async () => {
-    const mockJson = {
-      limit: 50,
-      offset: 0,
-      total: 2,
-      results: [
-        {
-          asset_identifier:
-            "SPXG42Y7WDTMZF5MPV02C3AWY1VNP9FH9C23PRXH.Marbling::Marbling",
-          value: {
-            hex: "0x01000000000000000000000000000005e7",
-            repr: "u1511",
-          },
-          block_height: 85084,
-          tx_id:
-            "0xa071319bc98c08ce9817cf0f7f2669bbb757be289c532db7374f38ea2ab92804",
-        },
-        {
-          asset_identifier:
-            "SP497E7RX3233ATBS2AB9G4WTHB63X5PBSP5VGAQ.boom-nfts::boom",
-          value: {
-            hex: "0x0100000000000000000000000000001d5d",
-            repr: "u7517",
-          },
-          block_height: 37467,
-          tx_id:
-            "0x173957bb628b0350dbc37a21ffea9165fdc21a8ddab5e1a686c54d18d9644acf",
-        },
-      ],
-    };
-
-    global.fetch = vi.fn(async () =>
-      Promise.resolve({
-        json: () => Promise.resolve(mockJson),
-      })
-    ) as Mock;
-
-    expect(await fetchHoldings()).toBe(mockJson);
   });
 });

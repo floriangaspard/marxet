@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { useListedCollectibles } from "../useListedCollectibles";
-import { beforeEach, expect, it, vi } from "vitest";
-import { describe } from "node:test";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { callReadOnlyFunction } from "@stacks/transactions";
 import { ListedCollectible } from "../../types/Collectible";
 
@@ -72,9 +71,14 @@ beforeEach(() => {
     };
   });
 
-  vi.mock("@/features/collectibles/utils/helper.ts", () => {
+  vi.mock("@/features/collectibles/api/listedCollectibles.ts", () => {
     return {
       retrieveListingNonce: vi.fn().mockReturnValue(2),
+    };
+  });
+
+  vi.mock("@/features/collectibles/api/collectibles.ts", () => {
+    return {
       getAssetName: vi.fn().mockReturnValue("assetName"),
     };
   });

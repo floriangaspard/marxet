@@ -18,8 +18,9 @@ import { StacksMocknet } from "@stacks/network";
 import { userSession } from "@/user-session";
 import { jsonParseCollectible } from "../utils/parsing";
 import { openContractCall } from "@stacks/connect";
-import { getAssetName, retrieveListingNonce } from "../utils/helper";
 import { TRANSACTION_STATUS } from "../types/TransactionStatus";
+import { getAssetName } from "../api/collectibles";
+import { retrieveListingNonce } from "../api/listedCollectibles";
 
 export const useListedCollectibles = () => {
   const [collectibles, setCollectibles] = useState<ListedCollectible[]>([]);

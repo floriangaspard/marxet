@@ -2,8 +2,8 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { useMyCollectibles } from "../useMyCollectibles";
 import { beforeEach } from "node:test";
-import { fetchHoldings, isWhitelisted } from "../../utils/helper";
 import { openContractCall } from "@stacks/connect";
+import { getHoldings, isWhitelisted } from "../../api/collectibles";
 
 const mockHoldings = {
   limit: 50,
@@ -46,20 +46,23 @@ beforeEach(() => {
     };
   });
 
-  vi.mock("@/features/collectibles/utils/helper.ts", async (importOriginal) => {
-    return {
-      ...(await importOriginal<
-        typeof import("@/features/collectibles/utils/helper.ts")
-      >()),
-      fetchHoldings: vi.fn(),
-      isWhitelisted: vi.fn(),
-    };
-  });
+  vi.mock(
+    "@/features/collectibles/api/collectibles.ts",
+    async (importOriginal) => {
+      return {
+        ...(await importOriginal<
+          typeof import("@/features/collectibles/api/collectibles.ts")
+        >()),
+        getHoldings: vi.fn(),
+        isWhitelisted: vi.fn(),
+      };
+    }
+  );
 });
 
 describe("Retrieve my collectibles", () => {
   it("should be empty", async () => {
-    vi.mocked(fetchHoldings).mockResolvedValue({
+    vi.mocked(getHoldings).mockResolvedValue({
       limit: 50,
       offset: 0,
       total: 0,
@@ -72,7 +75,7 @@ describe("Retrieve my collectibles", () => {
   });
 
   it("should list 2 collectibles", async () => {
-    vi.mocked(fetchHoldings).mockResolvedValue(mockHoldings);
+    vi.mocked(getHoldings).mockResolvedValue(mockHoldings);
     vi.mocked(isWhitelisted).mockResolvedValue(true);
 
     const { result } = renderHook(() => useMyCollectibles());
@@ -80,7 +83,7 @@ describe("Retrieve my collectibles", () => {
   });
 
   it("should list 1 whitelisted true and 1 whitelisted false", async () => {
-    vi.mocked(fetchHoldings).mockResolvedValue(mockHoldings);
+    vi.mocked(getHoldings).mockResolvedValue(mockHoldings);
     vi.mocked(isWhitelisted).mockResolvedValueOnce(false);
     vi.mocked(isWhitelisted).mockResolvedValue(true);
 
@@ -123,7 +126,7 @@ describe("List collectibles", () => {
   });
 
   it("should call openContractCall", async () => {
-    vi.mocked(fetchHoldings).mockResolvedValue(mockHoldings);
+    vi.mocked(getHoldings).mockResolvedValue(mockHoldings);
     vi.mocked(isWhitelisted).mockResolvedValue(true);
 
     const { result } = renderHook(() => useMyCollectibles());
