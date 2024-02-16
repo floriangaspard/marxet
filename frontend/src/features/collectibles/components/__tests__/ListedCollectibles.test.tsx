@@ -15,6 +15,7 @@ const mockListedCollectibles: ListedCollectible[] = [
     tokenId: "12",
     paymentAssetContract: undefined,
     taker: undefined,
+    paymentSymbol: "STX",
   },
   {
     expiry: "300",
@@ -25,6 +26,7 @@ const mockListedCollectibles: ListedCollectible[] = [
     tokenId: "122",
     paymentAssetContract: undefined,
     taker: undefined,
+    paymentSymbol: "STX",
   },
 ];
 
