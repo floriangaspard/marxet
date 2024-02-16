@@ -61,6 +61,7 @@ describe("Display listed collectibles", () => {
           tokenId: "12",
           paymentAssetContract: undefined,
           taker: undefined,
+          paymentSymbol: "AZE",
         },
       ],
       buyAsset: vi.fn(),
@@ -73,7 +74,7 @@ describe("Display listed collectibles", () => {
     expect(screen.getByRole("heading").textContent).toBe(
       "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract"
     );
-    expect(screen.getByText("STX: 1000")).toBeDefined();
+    expect(screen.getByText("AZE: 1000")).toBeDefined();
   });
 
   it("should display 2 collectibles", () => {

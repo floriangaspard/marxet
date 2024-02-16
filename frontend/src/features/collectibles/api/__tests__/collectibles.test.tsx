@@ -1,6 +1,12 @@
 import { Mock, describe, expect, it, vi } from "vitest";
-import { getHoldings, getAssetName, isWhitelisted } from "../collectibles";
-import { callReadOnlyFunction } from "@stacks/transactions";
+import {
+  getHoldings,
+  getNonFungibleAssetName,
+  isWhitelisted,
+  listCollectible,
+} from "../collectibles";
+import { callReadOnlyFunction, createAssetInfo } from "@stacks/transactions";
+import { openContractCall } from "@stacks/connect";
 
 vi.mock("@/user-session", () => {
   return {
@@ -16,6 +22,7 @@ vi.mock("@stacks/transactions", async (importOriginal) => {
   return {
     ...(await importOriginal<typeof import("@stacks/transactions")>()),
     callReadOnlyFunction: vi.fn(),
+    makeStandardNonFungiblePostCondition: vi.fn(),
   };
 });
 
@@ -89,7 +96,7 @@ describe("getAssetName", () => {
       })
     ) as Mock;
 
-    expect(await getAssetName("", "")).toBe("Marbling");
+    expect(await getNonFungibleAssetName("", "")).toBe("Marbling");
   });
 });
 
@@ -108,5 +115,31 @@ describe("isWhitelisted", () => {
     expect(
       await isWhitelisted("SPXG42Y7WDTMZF5MPV02C3AWY1VNP9FH9C23PRXH.a")
     ).toBe(false);
+  });
+});
+
+describe("listCollectible", () => {
+  vi.mock("@stacks/connect", async (importOriginal) => {
+    return {
+      ...(await importOriginal<typeof import("@stacks/connect")>()),
+      openContractCall: vi.fn(),
+    };
+  });
+
+  it("should call openContractCall", async () => {
+    await listCollectible(
+      2,
+      createAssetInfo(
+        "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+        "Marbling",
+        "Marbling"
+      ),
+      33330,
+      undefined,
+      () => {},
+      () => {}
+    );
+
+    expect(openContractCall).toHaveBeenCalledOnce();
   });
 });

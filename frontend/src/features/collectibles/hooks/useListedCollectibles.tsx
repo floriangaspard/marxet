@@ -19,7 +19,7 @@ import { userSession } from "@/user-session";
 import { jsonParseCollectible } from "../utils/parsing";
 import { openContractCall } from "@stacks/connect";
 import { TRANSACTION_STATUS } from "../types/TransactionStatus";
-import { getAssetName } from "../api/collectibles";
+import { getNonFungibleAssetName } from "../api/collectibles";
 import { retrieveListingNonce } from "../api/listedCollectibles";
 
 export const useListedCollectibles = () => {
@@ -45,7 +45,7 @@ export const useListedCollectibles = () => {
       );
 
       if (response !== null) {
-        retrieved.push(jsonParseCollectible(response, i - 1));
+        retrieved.push(await jsonParseCollectible(response, i - 1));
       }
     }
 
@@ -54,7 +54,7 @@ export const useListedCollectibles = () => {
 
   const buyAsset = async (collectible: ListedCollectible) => {
     const assetInfo = parseAssetInfoString(collectible.nftAssetContract);
-    const assetName = await getAssetName(
+    const assetName = await getNonFungibleAssetName(
       addressToString(assetInfo.address),
       assetInfo.contractName.content
     );

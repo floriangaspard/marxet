@@ -1,8 +1,9 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Collectible } from "../../types/Collectible";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { MyCollectibles } from "../MyCollectibles";
 import { useMyCollectibles } from "../../hooks/useMyCollectibles";
+import { useListCollectible } from "../../hooks/useListCollectible";
 
 const mockCollectible: Collectible = {
   asset_identifier:
@@ -37,8 +38,17 @@ vi.mock("@/user-session", () => {
 });
 
 vi.mock("@/features/collectibles/hooks/useMyCollectibles");
+vi.mock("@/features/collectibles/hooks/useListCollectible");
 
 describe("Display my collectibles", () => {
+  beforeEach(() => {
+    vi.mocked(useListCollectible).mockReturnValue({
+      listAsset: vi.fn(),
+      setTransactionStatus: vi.fn(),
+      transactionStatus: "SIGN",
+    });
+  });
+
   afterEach(() => {
     cleanup();
   });
@@ -49,9 +59,6 @@ describe("Display my collectibles", () => {
       isAssetWhitelisted: {
         "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling": true,
       },
-      listAsset: vi.fn(),
-      setTransactionStatus: vi.fn(),
-      transactionStatus: "SIGN",
     });
 
     render(<MyCollectibles />);
@@ -69,9 +76,6 @@ describe("Display my collectibles", () => {
       isAssetWhitelisted: {
         "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling": true,
       },
-      listAsset: vi.fn(),
-      setTransactionStatus: vi.fn(),
-      transactionStatus: "SIGN",
     });
 
     render(<MyCollectibles />);
@@ -86,9 +90,6 @@ describe("Display my collectibles", () => {
       isAssetWhitelisted: {
         "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling": false,
       },
-      listAsset: vi.fn(),
-      setTransactionStatus: vi.fn(),
-      transactionStatus: "SIGN",
     });
 
     render(<MyCollectibles />);
@@ -103,9 +104,6 @@ describe("Display my collectibles", () => {
         "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling": true,
         "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.boom-nfts::boom": true,
       },
-      listAsset: vi.fn(),
-      setTransactionStatus: vi.fn(),
-      transactionStatus: "SIGN",
     });
 
     render(<MyCollectibles />);
@@ -119,29 +117,5 @@ describe("Display my collectibles", () => {
     expect(screen.getByText("u1511")).toBeDefined();
     expect(screen.getByText("u7517")).toBeDefined();
     expect(screen.getAllByRole("spinbutton")).toHaveLength(2);
-  });
-});
-
-describe("List one of my collectible", () => {
-  it("should set transaction status and call list function", () => {
-    const mockListAsset = vi.fn();
-    const mockSetTransactionStatus = vi.fn();
-
-    vi.mocked(useMyCollectibles).mockReturnValue({
-      collectibles: [mockCollectible],
-      isAssetWhitelisted: {
-        "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling": true,
-      },
-      listAsset: mockListAsset,
-      setTransactionStatus: mockSetTransactionStatus,
-      transactionStatus: "SIGN",
-    });
-
-    render(<MyCollectibles />);
-
-    fireEvent.click(screen.getByRole("button"));
-
-    expect(mockListAsset).toHaveBeenCalledOnce();
-    expect(mockSetTransactionStatus).toHaveBeenCalledOnce();
   });
 });

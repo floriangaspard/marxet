@@ -79,7 +79,7 @@ beforeEach(() => {
 
   vi.mock("@/features/collectibles/api/collectibles.ts", () => {
     return {
-      getAssetName: vi.fn().mockReturnValue("assetName"),
+      getNonFungibleAssetName: vi.fn().mockReturnValue("assetName"),
     };
   });
 
@@ -130,6 +130,7 @@ describe("Buy collectibles", () => {
       price: "1000",
       taker: "none",
       tokenId: "12",
+      paymentSymbol: "STX",
     };
 
     result.current.buyAsset(asset);

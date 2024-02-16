@@ -13,8 +13,8 @@
 
 (define-constant contract-owner tx-sender)
 (define-constant token-uri u"https://hiro.so") 
-(define-constant token-name "Clarity Coin")
-(define-constant token-symbol "CC")
+(define-constant token-name "Kral")
+(define-constant token-symbol "KRL")
 (define-constant token-decimals u6) 
 
 

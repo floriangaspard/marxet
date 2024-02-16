@@ -23,7 +23,9 @@ export const ListedCollectibles = () => {
             <CardContent>{collectible.tokenId}</CardContent>
             <CardFooter>
               <div className="flex justify-between w-full items-center">
-                <span>STX: {collectible.price}</span>
+                <span>
+                  {collectible.paymentSymbol}: {collectible.price}
+                </span>
                 <TransactionDialog
                   buttonText="Buy"
                   status={transactionStatus}

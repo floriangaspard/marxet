@@ -2,7 +2,6 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { useMyCollectibles } from "../useMyCollectibles";
 import { beforeEach } from "node:test";
-import { openContractCall } from "@stacks/connect";
 import { getHoldings, isWhitelisted } from "../../api/collectibles";
 
 const mockHoldings = {
@@ -103,37 +102,5 @@ describe("Retrieve my collectibles", () => {
         ]
       ).toBeTruthy()
     );
-  });
-});
-
-describe("List collectibles", () => {
-  beforeEach(() => {
-    vi.mock("@stacks/connect", async (importOriginal) => {
-      return {
-        ...(await importOriginal<typeof import("@stacks/connect")>()),
-        openContractCall: vi.fn(),
-      };
-    });
-  });
-
-  beforeEach(() => {
-    vi.mock("@stacks/transactions", async (importOriginal) => {
-      return {
-        ...(await importOriginal<typeof import("@stacks/connect")>()),
-        makeStandardNonFungiblePostCondition: vi.fn(),
-      };
-    });
-  });
-
-  it("should call openContractCall", async () => {
-    vi.mocked(getHoldings).mockResolvedValue(mockHoldings);
-    vi.mocked(isWhitelisted).mockResolvedValue(true);
-
-    const { result } = renderHook(() => useMyCollectibles());
-
-    await waitFor(() => expect(result.current.collectibles).toHaveLength(2));
-    result.current.listAsset(result.current.collectibles[1], 11111);
-
-    expect(openContractCall).toHaveBeenCalledOnce();
   });
 });

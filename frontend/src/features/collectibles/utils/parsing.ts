@@ -1,6 +1,8 @@
+import { addressToString, parseAssetInfoString } from "@stacks/transactions";
 import { ListedCollectible } from "../types/Collectible";
+import { getFungibleAssetSymbol } from "../api/collectibles";
 
-export const jsonParseCollectible = (
+export const jsonParseCollectible = async (
   response: {
     value: { [key: string]: { value: unknown } };
   },
@@ -19,6 +21,21 @@ export const jsonParseCollectible = (
   });
 
   parsed["listingId"] = listingId;
+
+  if (parsed["paymentAssetContract"]) {
+    parsed["paymentAssetContract"] = (
+      parsed["paymentAssetContract"] as { [key: string]: { value: "string" } }
+    )["value"];
+    const assetInfo = parseAssetInfoString(
+      parsed["paymentAssetContract"] as string
+    );
+    parsed["paymentSymbol"] = await getFungibleAssetSymbol(
+      addressToString(assetInfo.address),
+      assetInfo.contractName.content
+    );
+  } else {
+    parsed["paymentSymbol"] = "STX";
+  }
 
   return parsed as ListedCollectible;
 };

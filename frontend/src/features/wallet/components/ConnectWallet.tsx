@@ -23,7 +23,7 @@ function disconnect() {
 
 const ConnectWallet = () => {
   return (
-    <div className="flex gap-5 items-center pb-3">
+    <div className="flex gap-5 items-center">
       {userSession.isUserSignedIn() ? (
         <>
           <Button onClick={disconnect}>Disconnect Wallet</Button>
