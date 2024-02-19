@@ -56,6 +56,22 @@ export const getFungibleAssetSymbol = async (
   )["value"];
 };
 
+export const getFungibleAssetName = async (
+  contractAddress: string,
+  contractName: string
+) => {
+  return cvToValue(
+    await callReadOnlyFunction({
+      network: new StacksMocknet(),
+      contractAddress: contractAddress,
+      contractName: contractName,
+      functionName: "get-name",
+      functionArgs: [],
+      senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+    })
+  )["value"];
+};
+
 export const isWhitelisted = async (contract: string) => {
   return cvToValue(
     await callReadOnlyFunction({
