@@ -71,11 +71,17 @@ beforeEach(() => {
     };
   });
 
-  vi.mock("@/features/collectibles/api/listedCollectibles.ts", () => {
-    return {
-      retrieveListingNonce: vi.fn().mockReturnValue(2),
-    };
-  });
+  vi.mock(
+    "@/features/collectibles/api/listedCollectibles.ts",
+    async (importOriginal) => {
+      return {
+        ...(await importOriginal<
+          typeof import("@/features/collectibles/api/listedCollectibles.ts")
+        >()),
+        retrieveListingNonce: vi.fn().mockReturnValue(2),
+      };
+    }
+  );
 
   vi.mock("@/features/collectibles/api/collectibles.ts", () => {
     return {
@@ -126,11 +132,12 @@ describe("Buy collectibles", () => {
       expiry: "500",
       listingId: 1,
       maker: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
-      paymentAssetContract: "none",
+      paymentAssetContract: undefined,
       price: "1000",
       taker: "none",
       tokenId: "12",
       paymentSymbol: "STX",
+      paymentAssetName: "",
     };
 
     result.current.buyAsset(asset);
