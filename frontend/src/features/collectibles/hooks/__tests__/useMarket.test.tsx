@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { useListedCollectibles } from "../useListedCollectibles";
+import { useMarket } from "../useMarket";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { callReadOnlyFunction } from "@stacks/transactions";
 import { ListedCollectible } from "../../types/Collectible";
@@ -104,7 +104,7 @@ describe("Retrieve listed collectibles", () => {
       vi.fn().mockReturnValue({ type: 9 })
     );
 
-    const { result } = renderHook(() => useListedCollectibles());
+    const { result } = renderHook(() => useMarket());
     await waitFor(() => {
       expect(result.current.collectibles).toHaveLength(0);
     });
@@ -115,7 +115,7 @@ describe("Retrieve listed collectibles", () => {
       vi.fn().mockReturnValue(mockCollectible)
     );
 
-    const { result } = renderHook(() => useListedCollectibles());
+    const { result } = renderHook(() => useMarket());
 
     await waitFor(() => {
       expect(result.current.collectibles).toHaveLength(2);
@@ -125,7 +125,7 @@ describe("Retrieve listed collectibles", () => {
 
 describe("Buy collectibles", () => {
   it("should call openContractCall", async () => {
-    const { result } = renderHook(() => useListedCollectibles());
+    const { result } = renderHook(() => useMarket());
 
     const asset: ListedCollectible = {
       nftAssetContract: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.name",

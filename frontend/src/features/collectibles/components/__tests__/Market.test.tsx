@@ -3,7 +3,7 @@ import { afterEach, beforeEach, it } from "vitest";
 import { describe, expect, vi } from "vitest";
 import { Market } from "../Market";
 import { ListedCollectible } from "../../types/Collectible";
-import { useListedCollectibles } from "../../hooks/useListedCollectibles";
+import { useMarket } from "../../hooks/useMarket";
 
 const mockListedCollectibles: ListedCollectible[] = [
   {
@@ -44,7 +44,7 @@ vi.mock("@/user-session", () => {
 });
 
 beforeEach(() => {
-  vi.mock("@/features/collectibles/hooks/useListedCollectibles");
+  vi.mock("@/features/collectibles/hooks/useMarket");
 });
 
 afterEach(() => {
@@ -53,7 +53,7 @@ afterEach(() => {
 
 describe("Display listed collectibles", () => {
   it("should display collectible data", () => {
-    vi.mocked(useListedCollectibles).mockReturnValue({
+    vi.mocked(useMarket).mockReturnValue({
       collectibles: [
         {
           expiry: "500",
@@ -83,7 +83,7 @@ describe("Display listed collectibles", () => {
   });
 
   it("should display 2 collectibles", () => {
-    vi.mocked(useListedCollectibles).mockReturnValue({
+    vi.mocked(useMarket).mockReturnValue({
       collectibles: mockListedCollectibles,
       buyAsset: vi.fn(),
       setTransactionStatus: vi.fn(),
@@ -101,7 +101,7 @@ describe("Try to buy a listed collectible", () => {
     const mockSetTransactionStatus = vi.fn();
     const mockBuyAsset = vi.fn();
 
-    vi.mocked(useListedCollectibles).mockReturnValue({
+    vi.mocked(useMarket).mockReturnValue({
       collectibles: mockListedCollectibles,
       buyAsset: mockBuyAsset,
       setTransactionStatus: mockSetTransactionStatus,

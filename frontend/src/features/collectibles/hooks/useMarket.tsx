@@ -19,7 +19,7 @@ import {
   retrieveListingNonce,
 } from "../api/listedCollectibles";
 
-export const useListedCollectibles = () => {
+export const useMarket = () => {
   const [collectibles, setCollectibles] = useState<ListedCollectible[]>([]);
   const [transactionStatus, setTransactionStatus] =
     useState<TRANSACTION_STATUS>("SIGN");

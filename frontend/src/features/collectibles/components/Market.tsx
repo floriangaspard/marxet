@@ -5,12 +5,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card";
-import { useListedCollectibles } from "../hooks/useListedCollectibles";
+import { useMarket } from "../hooks/useMarket";
 import { TransactionDialog } from "./TransactionDialog";
 
 export const Market = () => {
   const { collectibles, buyAsset, transactionStatus, setTransactionStatus } =
-    useListedCollectibles();
+    useMarket();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
