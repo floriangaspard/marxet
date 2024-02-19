@@ -18,4 +18,5 @@ export type ListedCollectible = {
   taker: string | undefined;
   tokenId: string;
   paymentSymbol: string;
+  paymentAssetName: string;
 };

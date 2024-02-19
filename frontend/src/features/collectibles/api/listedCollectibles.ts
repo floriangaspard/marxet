@@ -10,16 +10,13 @@ import {
   addressToString,
   callReadOnlyFunction,
   contractPrincipalCV,
-  createAssetInfo,
   cvToValue,
   makeContractNonFungiblePostCondition,
   makeStandardFungiblePostCondition,
   makeStandardSTXPostCondition,
-  parseAssetInfoString,
   uintCV,
 } from "@stacks/transactions";
 import { ListedCollectible } from "../types/Collectible";
-import { getFungibleAssetName } from "./collectibles";
 
 export const retrieveListingNonce = async () => {
   return parseInt(
@@ -39,6 +36,7 @@ export const retrieveListingNonce = async () => {
 export const buyCollectible = async (
   collectible: ListedCollectible,
   assetInfo: AssetInfo,
+  paymentAssetInfo: AssetInfo | undefined,
   onFinish: () => void,
   onCancel: () => void
 ) => {
@@ -49,26 +47,12 @@ export const buyCollectible = async (
       assetInfo.contractName.content
     ),
   ];
-  let paymentAssetPrincipal: AssetInfo | undefined = undefined;
-  if (collectible.paymentAssetContract) {
-    paymentAssetPrincipal = parseAssetInfoString(
-      collectible.paymentAssetContract!
-    );
 
-    const assetName = await getFungibleAssetName(
-      addressToString(paymentAssetPrincipal!.address),
-      paymentAssetPrincipal!.contractName.content
-    );
-    paymentAssetPrincipal = createAssetInfo(
-      addressToString(paymentAssetPrincipal!.address),
-      paymentAssetPrincipal!.contractName.content,
-      assetName
-    );
-
+  if (paymentAssetInfo !== undefined) {
     args.push(
       contractPrincipalCV(
-        addressToString(paymentAssetPrincipal!.address),
-        paymentAssetPrincipal!.contractName.content
+        addressToString(paymentAssetInfo.address),
+        paymentAssetInfo.contractName.content
       )
     );
   }
@@ -77,7 +61,7 @@ export const buyCollectible = async (
     contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
     contractName: "marxet",
     functionName:
-      paymentAssetPrincipal === undefined
+      paymentAssetInfo === undefined
         ? "fulfil-listing-stx"
         : "fulfil-listing-ft",
     functionArgs: args,
@@ -93,12 +77,12 @@ export const buyCollectible = async (
         assetInfo,
         uintCV(collectible.tokenId)
       ),
-      paymentAssetPrincipal !== undefined
+      paymentAssetInfo !== undefined
         ? makeStandardFungiblePostCondition(
             userSession.loadUserData().profile.stxAddress.testnet,
-            FungibleConditionCode.GreaterEqual,
-            0n,
-            paymentAssetPrincipal!
+            FungibleConditionCode.Equal,
+            collectible.price,
+            paymentAssetInfo!
           )
         : makeStandardSTXPostCondition(
             userSession.loadUserData().profile.stxAddress.testnet,
@@ -110,4 +94,17 @@ export const buyCollectible = async (
     onFinish: onFinish,
     onCancel: onCancel,
   });
+};
+
+export const retrieveListing = async (listingId: number) => {
+  return cvToValue(
+    await callReadOnlyFunction({
+      network: new StacksMocknet(),
+      contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+      contractName: "marxet",
+      functionName: "get-listing",
+      functionArgs: [uintCV(listingId)],
+      senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+    })
+  );
 };

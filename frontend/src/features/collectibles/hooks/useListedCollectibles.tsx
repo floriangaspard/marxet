@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 import { ListedCollectible } from "../types/Collectible";
 import {
+  AssetInfo,
   addressToString,
-  callReadOnlyFunction,
   createAssetInfo,
-  cvToValue,
   parseAssetInfoString,
-  uintCV,
 } from "@stacks/transactions";
-import { StacksMocknet } from "@stacks/network";
-import { userSession } from "@/user-session";
 import { jsonParseCollectible } from "../utils/parsing";
 import { TRANSACTION_STATUS } from "../types/TransactionStatus";
-import { getNonFungibleAssetName } from "../api/collectibles";
+import {
+  getFungibleAssetName,
+  getFungibleAssetSymbol,
+  getNonFungibleAssetName,
+} from "../api/collectibles";
 import {
   buyCollectible,
+  retrieveListing,
   retrieveListingNonce,
 } from "../api/listedCollectibles";
 
@@ -29,19 +30,29 @@ export const useListedCollectibles = () => {
     const nonce = await retrieveListingNonce();
 
     for (let i = nonce; i > 0; i--) {
-      response = cvToValue(
-        await callReadOnlyFunction({
-          network: new StacksMocknet(),
-          contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
-          contractName: "marxet",
-          functionName: "get-listing",
-          functionArgs: [uintCV(i - 1)],
-          senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
-        })
-      );
+      response = await retrieveListing(i - 1);
 
       if (response !== null) {
-        retrieved.push(await jsonParseCollectible(response, i - 1));
+        const parsedCollectible = await jsonParseCollectible(response, i - 1);
+
+        if (parsedCollectible.paymentAssetContract) {
+          const assetInfo = parseAssetInfoString(
+            parsedCollectible.paymentAssetContract as string
+          );
+          parsedCollectible.paymentSymbol = await getFungibleAssetSymbol(
+            addressToString(assetInfo.address),
+            assetInfo.contractName.content
+          );
+
+          parsedCollectible.paymentAssetName = await getFungibleAssetName(
+            addressToString(assetInfo.address),
+            assetInfo.contractName.content
+          );
+        } else {
+          parsedCollectible.paymentSymbol = "STX";
+        }
+
+        retrieved.push(parsedCollectible);
       }
     }
 
@@ -55,6 +66,20 @@ export const useListedCollectibles = () => {
       assetInfo.contractName.content
     );
 
+    let paymentAssetInfo: AssetInfo | undefined = undefined;
+
+    if (collectible.paymentAssetContract) {
+      paymentAssetInfo = parseAssetInfoString(
+        collectible.paymentAssetContract!
+      );
+
+      paymentAssetInfo = createAssetInfo(
+        addressToString(paymentAssetInfo!.address),
+        paymentAssetInfo!.contractName.content,
+        collectible.paymentAssetName
+      );
+    }
+
     buyCollectible(
       collectible,
       createAssetInfo(
@@ -62,6 +87,7 @@ export const useListedCollectibles = () => {
         assetInfo.contractName.content,
         assetName
       ),
+      paymentAssetInfo,
       () => {
         setTransactionStatus("SIGNED");
       },
