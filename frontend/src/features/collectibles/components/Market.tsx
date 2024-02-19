@@ -8,7 +8,7 @@ import {
 import { useListedCollectibles } from "../hooks/useListedCollectibles";
 import { TransactionDialog } from "./TransactionDialog";
 
-export const ListedCollectibles = () => {
+export const Market = () => {
   const { collectibles, buyAsset, transactionStatus, setTransactionStatus } =
     useListedCollectibles();
 

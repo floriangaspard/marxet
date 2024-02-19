@@ -1,5 +1,5 @@
 import { MainLayout } from "@/components/ui/MainLayout";
-import { ListedCollectibles } from "@/features/collectibles/components/ListedCollectibles";
+import { Market } from "@/features/collectibles/components/Market";
 import { MyCollectibles } from "@/features/collectibles/components/MyCollectibles";
 import { Navigate, useRoutes } from "react-router-dom";
 
@@ -16,7 +16,7 @@ export const AppRoutes = () => {
         },
         {
           path: "market",
-          element: <ListedCollectibles />,
+          element: <Market />,
         },
       ],
     },

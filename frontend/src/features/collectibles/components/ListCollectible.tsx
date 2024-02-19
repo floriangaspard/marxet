@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/Input";
 import { useRef, useState } from "react";
-import { AssetChoice } from "./AssetChoice";
+import { PaymentAssetChoice } from "./PaymentAssetChoice";
 import { TransactionDialog } from "./TransactionDialog";
 import { useListCollectible } from "../hooks/useListCollectible";
 import { Collectible } from "../types/Collectible";
@@ -24,7 +24,7 @@ export const ListCollectible = ({
           ref={(el) => (inputRefs.current = el as HTMLInputElement)}
           placeholder="price"
         ></Input>
-        <AssetChoice value={paymentAsset} setValue={setPaymentAsset} />
+        <PaymentAssetChoice value={paymentAsset} setValue={setPaymentAsset} />
       </div>
 
       <TransactionDialog

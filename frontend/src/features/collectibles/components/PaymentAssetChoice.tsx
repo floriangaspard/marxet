@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { cn } from "@/utils/classNames";
 
-export const AssetChoice = ({
+export const PaymentAssetChoice = ({
   value,
   setValue,
 }: {

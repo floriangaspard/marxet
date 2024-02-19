@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, it } from "vitest";
 import { describe, expect, vi } from "vitest";
-import { ListedCollectibles } from "../ListedCollectibles";
+import { Market } from "../Market";
 import { ListedCollectible } from "../../types/Collectible";
 import { useListedCollectibles } from "../../hooks/useListedCollectibles";
 
@@ -16,6 +16,7 @@ const mockListedCollectibles: ListedCollectible[] = [
     paymentAssetContract: undefined,
     taker: undefined,
     paymentSymbol: "STX",
+    paymentAssetName: "",
   },
   {
     expiry: "300",
@@ -27,6 +28,7 @@ const mockListedCollectibles: ListedCollectible[] = [
     paymentAssetContract: undefined,
     taker: undefined,
     paymentSymbol: "STX",
+    paymentAssetName: "",
   },
 ];
 
@@ -64,6 +66,7 @@ describe("Display listed collectibles", () => {
           paymentAssetContract: undefined,
           taker: undefined,
           paymentSymbol: "AZE",
+          paymentAssetName: "azert",
         },
       ],
       buyAsset: vi.fn(),
@@ -71,7 +74,7 @@ describe("Display listed collectibles", () => {
       transactionStatus: "SIGN",
     });
 
-    render(<ListedCollectibles />);
+    render(<Market />);
 
     expect(screen.getByRole("heading").textContent).toBe(
       "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract"
@@ -87,7 +90,7 @@ describe("Display listed collectibles", () => {
       transactionStatus: "SIGN",
     });
 
-    render(<ListedCollectibles />);
+    render(<Market />);
 
     expect(screen.getAllByRole("button")).toHaveLength(2);
   });
@@ -105,7 +108,7 @@ describe("Try to buy a listed collectible", () => {
       transactionStatus: "SIGN",
     });
 
-    render(<ListedCollectibles />);
+    render(<Market />);
 
     fireEvent.click(screen.getAllByRole("button")[0]);
     expect(mockBuyAsset).toHaveBeenCalledOnce();
