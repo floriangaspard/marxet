@@ -28,7 +28,7 @@ const mockCollectible = {
           version: 26,
         },
         contractName: {
-          content: "sip009-nft",
+          content: "materials",
           lengthPrefixBytes: 1,
           maxLengthBytes: 128,
           type: 2,

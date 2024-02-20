@@ -16,7 +16,7 @@ describe("jsonParseCollectible", () => {
         },
         "nft-asset-contract": {
           type: "principal",
-          value: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip009-nft",
+          value: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.materials",
         },
         "payment-asset-contract": {
           type: "(optional none)",
@@ -43,7 +43,7 @@ describe("jsonParseCollectible", () => {
     expect(result.listingId).toBe(2);
     expect(result.maker).toBe("ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM");
     expect(result.nftAssetContract).toBe(
-      "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip009-nft"
+      "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.materials"
     );
     expect(result.paymentAssetContract).toBeNull();
     expect(result.price).toBe("1000");

@@ -35,10 +35,10 @@ plan:
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
-            contract-name: sip009-nft
+            contract-name: materials
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             cost: 12100
-            path: contracts/sip009-nft.clar
+            path: contracts/materials.clar
             anchor-block-only: true
             clarity-version: 2
         - contract-publish:
