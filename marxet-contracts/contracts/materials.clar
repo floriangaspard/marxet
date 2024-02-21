@@ -20,7 +20,7 @@
 )
 
 (define-read-only (get-token-uri (token-id uint)) 
-    (ok none)
+    (ok (some (concat (concat "http://localhost:5173/" (int-to-ascii token-id)) ".json")))
 )
 
 (define-read-only (get-owner (token-id uint)) 

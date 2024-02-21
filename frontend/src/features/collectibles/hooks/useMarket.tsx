@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { ListedCollectible } from "../types/Collectible";
 import {
   AssetInfo,
   addressToString,
@@ -11,6 +10,7 @@ import { TRANSACTION_STATUS } from "../types/TransactionStatus";
 import {
   getFungibleAssetName,
   getFungibleAssetSymbol,
+  getMetadata,
   getNonFungibleAssetName,
 } from "../api/collectibles";
 import {
@@ -18,6 +18,7 @@ import {
   retrieveListing,
   retrieveListingNonce,
 } from "../api/listedCollectibles";
+import { ListedCollectible } from "../types/ListedCollectible";
 
 export const useMarket = () => {
   const [collectibles, setCollectibles] = useState<ListedCollectible[]>([]);
@@ -51,6 +52,13 @@ export const useMarket = () => {
         } else {
           parsedCollectible.paymentSymbol = "STX";
         }
+
+        const nft = parseAssetInfoString(parsedCollectible.nftAssetContract);
+        parsedCollectible.metadata = await getMetadata(
+          parseInt(parsedCollectible.tokenId),
+          addressToString(nft.address),
+          nft.contractName.content
+        );
 
         retrieved.push(parsedCollectible);
       }

@@ -13,32 +13,45 @@ export const Market = () => {
     useMarket();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
       {collectibles.map((collectible) => {
-        return (
-          <Card key={collectible.nftAssetContract + collectible.tokenId}>
-            <CardHeader>
-              <CardTitle>{collectible.nftAssetContract}</CardTitle>
-            </CardHeader>
-            <CardContent>{collectible.tokenId}</CardContent>
-            <CardFooter>
-              <div className="flex justify-between w-full items-center">
-                <span>
-                  {collectible.paymentSymbol}: {collectible.price}
-                </span>
-                <TransactionDialog
-                  buttonText="Buy"
-                  status={transactionStatus}
-                  title="Buy asset"
-                  onClick={() => {
-                    setTransactionStatus("SIGN");
-                    buyAsset(collectible);
-                  }}
-                />
-              </div>
-            </CardFooter>
-          </Card>
-        );
+        if (collectible.metadata) {
+          return (
+            <Card key={collectible.nftAssetContract + collectible.tokenId}>
+              <CardHeader>
+                <CardTitle>{collectible.metadata.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-3">
+                  <div className="flex justify-center">
+                    <img
+                      className="h-[300px]"
+                      src={collectible.metadata.image}
+                    />
+                  </div>
+
+                  {collectible.metadata.description}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <div className="flex justify-between w-full items-center">
+                  <span>
+                    {collectible.price} {collectible.paymentSymbol}
+                  </span>
+                  <TransactionDialog
+                    buttonText="Buy"
+                    status={transactionStatus}
+                    title="Buy asset"
+                    onClick={() => {
+                      setTransactionStatus("SIGN");
+                      buyAsset(collectible);
+                    }}
+                  />
+                </div>
+              </CardFooter>
+            </Card>
+          );
+        }
       })}
     </div>
   );

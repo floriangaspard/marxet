@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Collectible } from "../types/Collectible";
-import { getHoldings, isWhitelisted } from "../api/collectibles";
+import { getHoldings, getMetadata, isWhitelisted } from "../api/collectibles";
+import { addressToString, parseAssetInfoString } from "@stacks/transactions";
 
 export const useMyCollectibles = () => {
   const [collectibles, setCollectibles] = useState<Collectible[]>([]);
@@ -28,6 +29,17 @@ export const useMyCollectibles = () => {
 
   const retrieveCollectibles = useCallback(async () => {
     const holdings = (await getHoldings())["results"] as Collectible[];
+
+    await Promise.all(
+      holdings.map(async (h) => {
+        const infos = parseAssetInfoString(h.asset_identifier);
+        h.metadata = await getMetadata(
+          parseInt(h.value.repr.substring(1)),
+          addressToString(infos.address),
+          infos.contractName.content
+        );
+      })
+    );
 
     setCollectibles(holdings);
     getWhitelistedStatus(holdings);

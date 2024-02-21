@@ -1,0 +1,8 @@
+{
+  "sip": 16,
+  "name": "Material #2",
+  "properties": { "collection": "Materials" },
+  "description": "The second material.",
+  "asset_type": "image/png",
+  "image": "http://localhost:5173/2.png"
+}

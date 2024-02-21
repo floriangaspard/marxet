@@ -136,3 +136,36 @@ export const listCollectible = async (
     onCancel: onCancel,
   });
 };
+
+export const getTokenUri = async (
+  tokenId: number,
+  contractAddress: string,
+  contractName: string
+) => {
+  return cvToValue(
+    await callReadOnlyFunction({
+      network: new StacksMocknet(),
+      contractAddress: contractAddress,
+      contractName: contractName,
+      functionName: "get-token-uri",
+      functionArgs: [uintCV(tokenId)],
+      senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+    })
+  )["value"]["value"];
+};
+
+export const getMetadata = async (
+  tokenId: number,
+  contractAddress: string,
+  contractName: string
+) => {
+  const tokenUri = await getTokenUri(tokenId, contractAddress, contractName);
+  const response = await fetch(tokenUri);
+  const json = response
+    .json()
+    .then((data) => data)
+    .catch(() => {
+      console.log("No metadata found");
+    });
+  return json;
+};

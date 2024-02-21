@@ -16,7 +16,7 @@ import {
   makeStandardSTXPostCondition,
   uintCV,
 } from "@stacks/transactions";
-import { ListedCollectible } from "../types/Collectible";
+import { ListedCollectible } from "../types/ListedCollectible";
 
 export const retrieveListingNonce = async () => {
   return parseInt(

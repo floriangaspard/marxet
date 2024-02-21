@@ -1,4 +1,4 @@
-import { ListedCollectible } from "../types/Collectible";
+import { ListedCollectible } from "../types/ListedCollectible";
 
 export const jsonParseCollectible = async (
   response: {
