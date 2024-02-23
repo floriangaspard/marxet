@@ -28,6 +28,13 @@ plan:
     - id: 1
       transactions:
         - contract-publish:
+            contract-name: happy-welsh
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 13420
+            path: contracts/happy-welsh.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
             contract-name: marxet
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             cost: 58080
@@ -46,6 +53,13 @@ plan:
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             cost: 13810
             path: contracts/sip010-token.clar
+            anchor-block-only: true
+            clarity-version: 2
+        - contract-publish:
+            contract-name: stacks-satoshis
+            expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            cost: 13670
+            path: contracts/stacks-satoshis.clar
             anchor-block-only: true
             clarity-version: 2
       epoch: "2.4"

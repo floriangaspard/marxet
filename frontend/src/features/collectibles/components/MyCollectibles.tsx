@@ -8,6 +8,15 @@ import {
 import { useMyCollectibles } from "../hooks/useMyCollectibles";
 import { ListCollectible } from "./ListCollectible";
 
+const getImageUrl = (image: string) => {
+  if (image.includes("ipfs://ipfs/"))
+    image = image.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
+  else if (image.includes("ipfs://"))
+    image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+
+  return image;
+};
+
 export const MyCollectibles = () => {
   const { collectibles, isAssetWhitelisted } = useMyCollectibles();
 
@@ -25,7 +34,7 @@ export const MyCollectibles = () => {
                   <div className="flex justify-center">
                     <img
                       className="h-[300px]"
-                      src={collectible.metadata.image}
+                      src={getImageUrl(collectible.metadata.image)}
                     />
                   </div>
 
