@@ -3,6 +3,7 @@ import { showConnect } from "@stacks/connect";
 import { userSession } from "../../../user-session";
 import { Button } from "../../../components/ui/Button";
 import { useEffect, useState } from "react";
+import fetchExplorer from "@/utils/fetchExplorer";
 
 function authenticate() {
   showConnect({
@@ -27,8 +28,8 @@ const ConnectWallet = () => {
 
   useEffect(() => {
     const getWalletBalance = async () => {
-      const balances = await fetch(
-        "http://localhost:3999/extended/v1/address/" +
+      const balances = await fetchExplorer(
+        "/extended/v1/address/" +
           userSession.loadUserData().profile.stxAddress.testnet +
           "/balances"
       );

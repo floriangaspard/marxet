@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/Command";
 import { useState } from "react";
 import { cn } from "@/utils/classNames";
+import { DEPLOYER_ADDRESS } from "@/config";
 
 export const PaymentAssetChoice = ({
   value,
@@ -31,7 +32,7 @@ export const PaymentAssetChoice = ({
     },
     {
       label: "KRAL",
-      value: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip010-token",
+      value: DEPLOYER_ADDRESS + ".sip010-token",
     },
   ];
 

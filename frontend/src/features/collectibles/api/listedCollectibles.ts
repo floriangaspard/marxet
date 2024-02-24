@@ -1,6 +1,5 @@
 import { userSession } from "@/user-session";
 import { openContractCall } from "@stacks/connect";
-import { StacksMocknet } from "@stacks/network";
 import {
   AnchorMode,
   AssetInfo,
@@ -17,13 +16,14 @@ import {
   uintCV,
 } from "@stacks/transactions";
 import { ListedCollectible } from "../types/ListedCollectible";
+import { CURRENT_NETWORK, DEPLOYER_ADDRESS } from "@/config";
 
 export const retrieveListingNonce = async () => {
   return parseInt(
     cvToValue(
       await callReadOnlyFunction({
-        network: new StacksMocknet(),
-        contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+        network: CURRENT_NETWORK,
+        contractAddress: DEPLOYER_ADDRESS,
         contractName: "marxet",
         functionName: "get-listing-nonce",
         functionArgs: [],
@@ -58,7 +58,7 @@ export const buyCollectible = async (
   }
 
   await openContractCall({
-    contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+    contractAddress: DEPLOYER_ADDRESS,
     contractName: "marxet",
     functionName:
       paymentAssetInfo === undefined
@@ -67,11 +67,11 @@ export const buyCollectible = async (
     functionArgs: args,
 
     anchorMode: AnchorMode.OnChainOnly,
-    network: new StacksMocknet(),
+    network: CURRENT_NETWORK,
 
     postConditions: [
       makeContractNonFungiblePostCondition(
-        "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+        DEPLOYER_ADDRESS,
         "marxet",
         NonFungibleConditionCode.Sends,
         assetInfo,
@@ -99,8 +99,8 @@ export const buyCollectible = async (
 export const retrieveListing = async (listingId: number) => {
   return cvToValue(
     await callReadOnlyFunction({
-      network: new StacksMocknet(),
-      contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+      network: CURRENT_NETWORK,
+      contractAddress: DEPLOYER_ADDRESS,
       contractName: "marxet",
       functionName: "get-listing",
       functionArgs: [uintCV(listingId)],

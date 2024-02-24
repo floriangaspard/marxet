@@ -1,6 +1,7 @@
+import { CURRENT_NETWORK, DEPLOYER_ADDRESS } from "@/config";
 import { userSession } from "@/user-session";
+import fetchExplorer from "@/utils/fetchExplorer";
 import { openContractCall } from "@stacks/connect";
-import { StacksMocknet } from "@stacks/network";
 import {
   AnchorMode,
   AssetInfo,
@@ -17,8 +18,8 @@ import {
 } from "@stacks/transactions";
 
 export const getHoldings = async () => {
-  const retrievedMessage = await fetch(
-    "http://localhost:3999/extended/v1/tokens/nft/holdings?" +
+  const retrievedMessage = await fetchExplorer(
+    "/extended/v1/tokens/nft/holdings?" +
       new URLSearchParams({
         principal: userSession.loadUserData().profile.stxAddress.testnet,
       })
@@ -31,11 +32,8 @@ export const getNonFungibleAssetName = async (
   address: string,
   contractName: string
 ) => {
-  const response = await fetch(
-    "http://localhost:3999/v2/contracts/interface/" +
-      address +
-      "/" +
-      contractName
+  const response = await fetchExplorer(
+    "/v2/contracts/interface/" + address + "/" + contractName
   );
   return (await response.json())["non_fungible_tokens"][0]["name"];
 };
@@ -46,7 +44,7 @@ export const getFungibleAssetSymbol = async (
 ) => {
   return cvToValue(
     await callReadOnlyFunction({
-      network: new StacksMocknet(),
+      network: CURRENT_NETWORK,
       contractAddress: contractAddress,
       contractName: contractName,
       functionName: "get-symbol",
@@ -62,7 +60,7 @@ export const getFungibleAssetName = async (
 ) => {
   return cvToValue(
     await callReadOnlyFunction({
-      network: new StacksMocknet(),
+      network: CURRENT_NETWORK,
       contractAddress: contractAddress,
       contractName: contractName,
       functionName: "get-name",
@@ -75,8 +73,8 @@ export const getFungibleAssetName = async (
 export const isWhitelisted = async (contract: string) => {
   return cvToValue(
     await callReadOnlyFunction({
-      network: new StacksMocknet(),
-      contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+      network: CURRENT_NETWORK,
+      contractAddress: DEPLOYER_ADDRESS,
       contractName: "marxet",
       functionName: "is-whitelisted",
       functionArgs: [
@@ -96,7 +94,7 @@ export const listCollectible = async (
   onCancel: () => void
 ) => {
   await openContractCall({
-    network: new StacksMocknet(),
+    network: CURRENT_NETWORK,
     anchorMode: AnchorMode.OnChainOnly,
 
     postConditions: [
@@ -108,7 +106,7 @@ export const listCollectible = async (
       ),
     ],
 
-    contractAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+    contractAddress: DEPLOYER_ADDRESS,
     contractName: "marxet",
     functionName: "list-asset",
     functionArgs: [
@@ -144,7 +142,7 @@ export const getTokenUri = async (
 ) => {
   return cvToValue(
     await callReadOnlyFunction({
-      network: new StacksMocknet(),
+      network: CURRENT_NETWORK,
       contractAddress: contractAddress,
       contractName: contractName,
       functionName: "get-token-uri",
