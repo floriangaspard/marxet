@@ -6,16 +6,8 @@ import {
   CardTitle,
 } from "../../../components/ui/Card";
 import { useMyCollectibles } from "../hooks/useMyCollectibles";
+import { getImageUrl } from "../utils/parsing";
 import { ListCollectible } from "./ListCollectible";
-
-const getImageUrl = (image: string) => {
-  if (image.includes("ipfs://ipfs/"))
-    image = image.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
-  else if (image.includes("ipfs://"))
-    image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
-
-  return image;
-};
 
 export const MyCollectibles = () => {
   const { collectibles, isAssetWhitelisted } = useMyCollectibles();

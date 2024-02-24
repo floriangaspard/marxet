@@ -7,15 +7,7 @@ import {
 } from "@/components/ui/Card";
 import { useMarket } from "../hooks/useMarket";
 import { TransactionDialog } from "./TransactionDialog";
-
-const getImageUrl = (image: string) => {
-  if (image.includes("ipfs://ipfs/"))
-    image = image.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
-  else if (image.includes("ipfs://"))
-    image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
-
-  return image;
-};
+import { getImageUrl } from "../utils/parsing";
 
 export const Market = () => {
   const { collectibles, buyAsset, transactionStatus, setTransactionStatus } =

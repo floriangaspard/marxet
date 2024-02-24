@@ -28,3 +28,12 @@ export const jsonParseCollectible = async (
 
   return parsed as ListedCollectible;
 };
+
+export const getImageUrl = (image: string) => {
+  if (image.includes("ipfs://ipfs/"))
+    image = image.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
+  else if (image.includes("ipfs://"))
+    image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+
+  return image;
+};
