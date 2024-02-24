@@ -10,8 +10,8 @@ import { userSession } from "@/user-session";
 
 export const MainLayout = () => {
   return (
-    <div className="px-9 py-3 w-screen h-screen flex flex-col justify-between">
-      <NavigationMenu className="mb-5 max-h-[50px] sticky top-0 bg-white">
+    <div className="py-3 w-screen h-screen flex flex-col justify-between">
+      <NavigationMenu className="px-9 mb-5 max-h-[50px] sticky top-0 bg-white">
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link to="market" className={navigationMenuTriggerStyle()}>
@@ -30,10 +30,10 @@ export const MainLayout = () => {
           )}
         </NavigationMenuList>
       </NavigationMenu>
-      <div className="h-full overflow-y-scroll no-scrollbar">
+      <div className="mx-9 h-full overflow-y-scroll no-scrollbar bg-gray-100 p-10 rounded-lg">
         <Outlet />
       </div>
-      <div className="sticky bottom-0 bg-white mt-5">
+      <div className="sticky bottom-0 bg-white pt-4 px-9">
         <ConnectWallet />
       </div>
     </div>

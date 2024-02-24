@@ -37,13 +37,13 @@ export const MyCollectibles = () => {
                       src={getImageUrl(collectible.metadata.image)}
                     />
                   </div>
-
-                  {collectible.metadata.description}
                 </div>
               </CardContent>
               <CardFooter className="gap-4 flex flex-col items-start">
-                {isAssetWhitelisted[collectible.asset_identifier] && (
+                {isAssetWhitelisted[collectible.asset_identifier] ? (
                   <ListCollectible collectible={collectible} />
+                ) : (
+                  <p>Asset not whitelisted.</p>
                 )}
               </CardFooter>
             </Card>

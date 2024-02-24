@@ -8,12 +8,21 @@ import {
 import { useMarket } from "../hooks/useMarket";
 import { TransactionDialog } from "./TransactionDialog";
 
+const getImageUrl = (image: string) => {
+  if (image.includes("ipfs://ipfs/"))
+    image = image.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
+  else if (image.includes("ipfs://"))
+    image = image.replace("ipfs://", "https://ipfs.io/ipfs/");
+
+  return image;
+};
+
 export const Market = () => {
   const { collectibles, buyAsset, transactionStatus, setTransactionStatus } =
     useMarket();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
       {collectibles.map((collectible) => {
         if (collectible.metadata) {
           return (
@@ -26,16 +35,14 @@ export const Market = () => {
                   <div className="flex justify-center">
                     <img
                       className="h-[300px]"
-                      src={collectible.metadata.image}
+                      src={getImageUrl(collectible.metadata.image)}
                     />
                   </div>
-
-                  {collectible.metadata.description}
                 </div>
               </CardContent>
               <CardFooter>
                 <div className="flex justify-between w-full items-center">
-                  <span>
+                  <span className="font-bold">
                     {collectible.price} {collectible.paymentSymbol}
                   </span>
                   <TransactionDialog
