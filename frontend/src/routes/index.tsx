@@ -1,14 +1,10 @@
 import { MainLayout } from "@/components/ui/MainLayout";
 import { Market } from "@/features/collectibles/components/Market";
 import { MyCollectibles } from "@/features/collectibles/components/MyCollectibles";
-import {
-  Navigate,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 
 export const AppRoutes = () => {
-  const routes = createBrowserRouter([
+  const routes = [
     {
       path: "/",
       element: <MainLayout />,
@@ -24,9 +20,9 @@ export const AppRoutes = () => {
         },
       ],
     },
-  ]);
+  ];
 
-  // const element = useRoutes([...routes]);
+  const element = useRoutes([...routes]);
 
-  return <RouterProvider router={routes} />;
+  return element;
 };
