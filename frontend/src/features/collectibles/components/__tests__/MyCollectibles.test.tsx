@@ -14,6 +14,13 @@ const mockCollectible: Collectible = {
   },
   block_height: 85084,
   tx_id: "0xa071319bc98c08ce9817cf0f7f2669bbb757be289c532db7374f38ea2ab92804",
+  metadata: {
+    asset_type: "image/png",
+    description: "",
+    image: "",
+    name: "Marbling #1",
+    properties: "",
+  },
 };
 
 const mockCollectible2: Collectible = {
@@ -24,6 +31,13 @@ const mockCollectible2: Collectible = {
   },
   block_height: 37467,
   tx_id: "0x173957bb628b0350dbc37a21ffea9165fdc21a8ddab5e1a686c54d18d9644acf",
+  metadata: {
+    asset_type: "image/png",
+    description: "",
+    image: "",
+    name: "Marbling #2",
+    properties: "",
+  },
 };
 
 vi.mock("@/user-session", () => {
@@ -63,10 +77,7 @@ describe("Display my collectibles", () => {
 
     render(<MyCollectibles />);
 
-    expect(screen.getByRole("heading").textContent).toBe(
-      "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling"
-    );
-    expect(screen.getByText("u1511")).toBeDefined();
+    expect(screen.getByRole("heading").textContent).toBe("Marbling #1");
     expect(screen.getByRole("spinbutton")).toBeDefined();
   });
 
@@ -108,14 +119,8 @@ describe("Display my collectibles", () => {
 
     render(<MyCollectibles />);
 
-    expect(screen.getAllByRole("heading")[0].textContent).toBe(
-      "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Marbling::Marbling"
-    );
-    expect(screen.getAllByRole("heading")[1].textContent).toBe(
-      "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.boom-nfts::boom"
-    );
-    expect(screen.getByText("u1511")).toBeDefined();
-    expect(screen.getByText("u7517")).toBeDefined();
+    expect(screen.getAllByRole("heading")[0].textContent).toBe("Marbling #1");
+    expect(screen.getAllByRole("heading")[1].textContent).toBe("Marbling #2");
     expect(screen.getAllByRole("spinbutton")).toHaveLength(2);
   });
 });

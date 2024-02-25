@@ -54,6 +54,7 @@ beforeEach(() => {
         >()),
         getHoldings: vi.fn(),
         isWhitelisted: vi.fn(),
+        getMetadata: vi.fn(),
       };
     }
   );

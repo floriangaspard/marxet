@@ -126,6 +126,12 @@ describe("listCollectible", () => {
     };
   });
 
+  vi.mock("@/features/collectibles/api/network.ts", () => {
+    return {
+      getCurrentBlockHeight: vi.fn().mockResolvedValue(500),
+    };
+  });
+
   it("should call openContractCall", async () => {
     await listCollectible(
       2,

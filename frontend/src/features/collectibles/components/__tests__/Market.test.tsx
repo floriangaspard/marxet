@@ -2,8 +2,8 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, it } from "vitest";
 import { describe, expect, vi } from "vitest";
 import { Market } from "../Market";
-import { ListedCollectible } from "../../types/Collectible";
 import { useMarket } from "../../hooks/useMarket";
+import { ListedCollectible } from "../../types/ListedCollectible";
 
 const mockListedCollectibles: ListedCollectible[] = [
   {
@@ -11,24 +11,38 @@ const mockListedCollectibles: ListedCollectible[] = [
     listingId: 0,
     maker: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
     nftAssetContract: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract",
-    price: "1000",
+    price: 1000,
     tokenId: "12",
     paymentAssetContract: undefined,
     taker: undefined,
     paymentSymbol: "STX",
     paymentAssetName: "",
+    metadata: {
+      asset_type: "image/png",
+      description: "",
+      image: "",
+      name: "Marbling #1",
+      properties: "",
+    },
   },
   {
     expiry: "300",
     listingId: 1,
     maker: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
     nftAssetContract: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract",
-    price: "10200",
+    price: 10200,
     tokenId: "122",
     paymentAssetContract: undefined,
     taker: undefined,
     paymentSymbol: "STX",
     paymentAssetName: "",
+    metadata: {
+      asset_type: "image/png",
+      description: "",
+      image: "",
+      name: "Marbling #1",
+      properties: "",
+    },
   },
 ];
 
@@ -61,12 +75,19 @@ describe("Display listed collectibles", () => {
           maker: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
           nftAssetContract:
             "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract",
-          price: "1000",
+          price: 1000,
           tokenId: "12",
           paymentAssetContract: undefined,
           taker: undefined,
           paymentSymbol: "AZE",
           paymentAssetName: "azert",
+          metadata: {
+            asset_type: "image/png",
+            description: "",
+            image: "",
+            name: "Marbling #1",
+            properties: "",
+          },
         },
       ],
       buyAsset: vi.fn(),
@@ -76,10 +97,8 @@ describe("Display listed collectibles", () => {
 
     render(<Market />);
 
-    expect(screen.getByRole("heading").textContent).toBe(
-      "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract"
-    );
-    expect(screen.getByText("AZE: 1000")).toBeDefined();
+    expect(screen.getByRole("heading").textContent).toBe("Marbling #1");
+    expect(screen.getByText("1000 AZE")).toBeDefined();
   });
 
   it("should display 2 collectibles", () => {

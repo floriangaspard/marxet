@@ -2,7 +2,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { useMarket } from "../useMarket";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { callReadOnlyFunction } from "@stacks/transactions";
-import { ListedCollectible } from "../../types/Collectible";
+import { ListedCollectible } from "../../types/ListedCollectible";
 
 const mockCollectible = {
   type: 10,
@@ -86,6 +86,7 @@ beforeEach(() => {
   vi.mock("@/features/collectibles/api/collectibles.ts", () => {
     return {
       getNonFungibleAssetName: vi.fn().mockReturnValue("assetName"),
+      getMetadata: vi.fn(),
     };
   });
 
@@ -133,11 +134,18 @@ describe("Buy collectibles", () => {
       listingId: 1,
       maker: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
       paymentAssetContract: undefined,
-      price: "1000",
+      price: 1000,
       taker: "none",
       tokenId: "12",
       paymentSymbol: "STX",
       paymentAssetName: "",
+      metadata: {
+        asset_type: "image/png",
+        description: "",
+        image: "",
+        name: "Marbling #1",
+        properties: "",
+      },
     };
 
     result.current.buyAsset(asset);
