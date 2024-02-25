@@ -25,7 +25,7 @@ export const MyCollectibles = () => {
                 <div className="flex flex-col gap-3">
                   <div className="flex justify-center">
                     <img
-                      className="h-[300px]"
+                      className="max-h-[300px]"
                       src={getImageUrl(collectible.metadata.image)}
                     />
                   </div>

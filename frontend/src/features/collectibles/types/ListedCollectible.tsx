@@ -6,7 +6,7 @@ export type ListedCollectible = {
   maker: string;
   nftAssetContract: string;
   paymentAssetContract: string | undefined;
-  price: string;
+  price: number;
   taker: string | undefined;
   tokenId: string;
   paymentSymbol: string;

@@ -60,6 +60,8 @@ export const useMarket = () => {
           nft.contractName.content
         );
 
+        parsedCollectible.price = parsedCollectible.price / 1e6;
+
         retrieved.push(parsedCollectible);
       }
     }

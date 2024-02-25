@@ -16,6 +16,7 @@ import {
   tupleCV,
   uintCV,
 } from "@stacks/transactions";
+import { getCurrentBlockHeight } from "./network";
 
 export const getHoldings = async () => {
   const retrievedMessage = await fetchExplorer(
@@ -117,7 +118,7 @@ export const listCollectible = async (
       tupleCV({
         taker: noneCV(),
         "token-id": uintCV(tokenId),
-        expiry: uintCV(500),
+        expiry: uintCV((await getCurrentBlockHeight()) + 50000),
         price: uintCV(price),
         "payment-asset-contract": paymentAssetInfo
           ? someCV(

@@ -16,13 +16,14 @@ export const useMyCollectibles = () => {
           collectibles.map((collectible) => collectible.asset_identifier)
         ),
       ];
-      unique.map(async (asset) => {
-        const isW = await isWhitelisted(asset.split("::")[0]);
-        setIsAssetWhiteListed((prev) => ({
-          ...prev,
-          [asset]: isW,
-        }));
-      });
+      const whitelist: { [fieldName: string]: boolean } = {};
+      await Promise.all(
+        unique.map(async (asset) => {
+          const isW = await isWhitelisted(asset.split("::")[0]);
+          whitelist[asset] = isW;
+        })
+      );
+      setIsAssetWhiteListed(whitelist);
     },
     []
   );

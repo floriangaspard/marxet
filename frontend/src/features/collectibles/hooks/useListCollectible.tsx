@@ -24,7 +24,7 @@ export const useListCollectible = () => {
     await listCollectible(
       tokenId,
       assetInfo,
-      price,
+      price * 1e6,
       paymentAssetPrincipal,
       () => {
         setTransactionStatus("SIGNED");

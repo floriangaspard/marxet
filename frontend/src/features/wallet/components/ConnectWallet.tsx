@@ -24,7 +24,7 @@ function disconnect() {
 }
 
 const ConnectWallet = () => {
-  const [stxBalance, setStxBalance] = useState("0");
+  const [stxBalance, setStxBalance] = useState(0);
 
   useEffect(() => {
     const getWalletBalance = async () => {
@@ -34,7 +34,7 @@ const ConnectWallet = () => {
           "/balances"
       );
 
-      setStxBalance((await balances.json())["stx"]["balance"]);
+      setStxBalance(parseInt((await balances.json())["stx"]["balance"]) / 1e6);
     };
 
     getWalletBalance();
