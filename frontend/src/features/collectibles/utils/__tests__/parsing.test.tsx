@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { jsonParseCollectible } from "../parsing";
+import { getImageUrl, jsonParseCollectible } from "../parsing";
 
 describe("jsonParseCollectible", () => {
   it("should return collectible object", async () => {
@@ -49,5 +49,25 @@ describe("jsonParseCollectible", () => {
     expect(result.price).toBe("1000");
     expect(result.taker).toBeNull();
     expect(result.tokenId).toBe("1");
+  });
+});
+
+describe("getImageUrl", () => {
+  it("should return the right ipfs url when url contains ipfs://", () => {
+    const url = getImageUrl(
+      "ipfs://QmajLS1WEMdBCNPwFh3yRKPxSiYQnfiZqooSyreGsXtzX1/1.png"
+    );
+    expect(url).toBe(
+      "https://ipfs.io/ipfs/QmajLS1WEMdBCNPwFh3yRKPxSiYQnfiZqooSyreGsXtzX1/1.png"
+    );
+  });
+
+  it("should return the right ipfs url when url contains ipfs://ipfs", () => {
+    const url = getImageUrl(
+      "ipfs://ipfs/QmVq6zLZnfrTCqYHXvuUdBwe3amiYuCq13bxCdnE9mqTMH/images/nerad_pixel_art_blockchain_Sat_coin_the_smallest_denomination_o_8d535c0c-c818-4375-aae8-a05f4af126c7.png"
+    );
+    expect(url).toBe(
+      "https://ipfs.io/ipfs/QmVq6zLZnfrTCqYHXvuUdBwe3amiYuCq13bxCdnE9mqTMH/images/nerad_pixel_art_blockchain_Sat_coin_the_smallest_denomination_o_8d535c0c-c818-4375-aae8-a05f4af126c7.png"
+    );
   });
 });

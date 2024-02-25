@@ -148,7 +148,7 @@ export const getTokenUri = async (
       contractName: contractName,
       functionName: "get-token-uri",
       functionArgs: [uintCV(tokenId)],
-      senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+      senderAddress: DEPLOYER_ADDRESS,
     })
   )["value"]["value"];
 };

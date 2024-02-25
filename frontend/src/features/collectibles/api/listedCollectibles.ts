@@ -27,7 +27,7 @@ export const retrieveListingNonce = async () => {
         contractName: "marxet",
         functionName: "get-listing-nonce",
         functionArgs: [],
-        senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+        senderAddress: DEPLOYER_ADDRESS,
       })
     )["value"]
   );
@@ -104,7 +104,7 @@ export const retrieveListing = async (listingId: number) => {
       contractName: "marxet",
       functionName: "get-listing",
       functionArgs: [uintCV(listingId)],
-      senderAddress: userSession.loadUserData().profile.stxAddress.testnet,
+      senderAddress: DEPLOYER_ADDRESS,
     })
   );
 };

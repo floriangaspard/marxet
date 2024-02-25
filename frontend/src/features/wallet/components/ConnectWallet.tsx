@@ -37,7 +37,7 @@ const ConnectWallet = () => {
       setStxBalance(parseInt((await balances.json())["stx"]["balance"]) / 1e6);
     };
 
-    getWalletBalance();
+    if (userSession.isUserSignedIn()) getWalletBalance();
   }, []);
 
   return (

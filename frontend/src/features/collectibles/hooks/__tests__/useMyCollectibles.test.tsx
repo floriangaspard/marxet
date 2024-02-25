@@ -2,7 +2,11 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { useMyCollectibles } from "../useMyCollectibles";
 import { beforeEach } from "node:test";
-import { getHoldings, isWhitelisted } from "../../api/collectibles";
+import {
+  getHoldings,
+  getMetadata,
+  isWhitelisted,
+} from "../../api/collectibles";
 
 const mockHoldings = {
   limit: 50,
@@ -32,6 +36,14 @@ const mockHoldings = {
         "0x173957bb628b0350dbc37a21ffea9165fdc21a8ddab5e1a686c54d18d9644acf",
     },
   ],
+};
+
+const mockMetadata = {
+  asset_type: "image/png",
+  description: "Cool collectible",
+  image: "image.png",
+  name: "Marbling #1",
+  properties: "props",
 };
 
 beforeEach(() => {
@@ -102,6 +114,17 @@ describe("Retrieve my collectibles", () => {
           "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.boom-nfts::boom"
         ]
       ).toBeTruthy()
+    );
+  });
+
+  it("should return metadata", async () => {
+    vi.mocked(getHoldings).mockResolvedValue(mockHoldings);
+    vi.mocked(isWhitelisted).mockResolvedValue(true);
+    vi.mocked(getMetadata).mockResolvedValue(mockMetadata);
+
+    const { result } = renderHook(() => useMyCollectibles());
+    await waitFor(() =>
+      expect(result.current.collectibles[0].metadata).toBe(mockMetadata)
     );
   });
 });

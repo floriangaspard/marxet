@@ -3,6 +3,7 @@ import { useMarket } from "../useMarket";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { callReadOnlyFunction } from "@stacks/transactions";
 import { ListedCollectible } from "../../types/ListedCollectible";
+import { getMetadata } from "../../api/collectibles";
 
 const mockCollectible = {
   type: 10,
@@ -120,6 +121,27 @@ describe("Retrieve listed collectibles", () => {
 
     await waitFor(() => {
       expect(result.current.collectibles).toHaveLength(2);
+    });
+  });
+
+  it("should return metadata", async () => {
+    const mockMetadata = {
+      asset_type: "image/png",
+      description: "Cool collectible",
+      image: "image.png",
+      name: "Marbling #1",
+      properties: "props",
+    };
+
+    vi.mocked(callReadOnlyFunction).mockImplementation(
+      vi.fn().mockReturnValue(mockCollectible)
+    );
+    vi.mocked(getMetadata).mockResolvedValue(mockMetadata);
+
+    const { result } = renderHook(() => useMarket());
+
+    await waitFor(() => {
+      expect(result.current.collectibles[0].metadata).toBe(mockMetadata);
     });
   });
 });
