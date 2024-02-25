@@ -13,6 +13,13 @@ const mockCollectible: Collectible = {
   },
   block_height: 85084,
   tx_id: "0xa071319bc98c08ce9817cf0f7f2669bbb757be289c532db7374f38ea2ab92804",
+  metadata: {
+    asset_type: "image/png",
+    description: "",
+    image: "",
+    name: "Marbling #1",
+    properties: "",
+  },
 };
 
 vi.mock("@/user-session", () => {
