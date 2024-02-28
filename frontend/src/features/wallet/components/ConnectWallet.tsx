@@ -41,20 +41,25 @@ const ConnectWallet = () => {
   }, []);
 
   return (
-    <div className="flex gap-5 items-center">
-      {userSession.isUserSignedIn() ? (
-        <>
-          <Button onClick={disconnect}>Disconnect Wallet</Button>
-          <div className="flex flex-col">
-            <p className="text-xs">
-              {userSession.loadUserData().profile.stxAddress.mainnet}
-            </p>
-            <p className="text-xl font-bold">{stxBalance} STX</p>
-          </div>
-        </>
-      ) : (
-        <Button onClick={authenticate}>Connect Wallet</Button>
-      )}
+    <div className="flex justify-between items-center">
+      <div className="flex gap-5 items-center">
+        {userSession.isUserSignedIn() ? (
+          <>
+            <Button onClick={disconnect}>Disconnect Wallet</Button>
+            <div className="flex flex-col">
+              <p className="text-xs">
+                {userSession.loadUserData().profile.stxAddress.mainnet}
+              </p>
+              <p className="text-xl font-bold">{stxBalance} STX</p>
+            </div>
+          </>
+        ) : (
+          <Button onClick={authenticate}>Connect Wallet</Button>
+        )}
+      </div>
+      <a href="https://floriangaspard.com" className="text-xs">
+        2024 - Florian Gaspard
+      </a>
     </div>
   );
 };
